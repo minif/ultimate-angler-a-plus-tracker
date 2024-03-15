@@ -1,0 +1,12 @@
+- Ranking
+	Exclusive = 100 weight
+	Non-exclusive = 30 weight
+	# of A+ already caught = 5 weight (prioritize cleanup)
+
+- Cleanup ranking:
+	Same as before but multiply exclusive and non-exclusive by # of A+ already caught
+
+- Option to weight exclusive more or less?
+- Way to check already caught A+ fish, as well as export/import data
+- Ability to pick a location and then check of A+ catches
+- Congratulate user for 160 A+ fish

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Ultimate Angler A+ Tracker</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<a href="../">Go Back</a>
+	<h1>Ultimate Angler A+ Tracker</h1>
+	<p>In case you aren't aware as to what this is for, Ultimate Angler is one of the eleven purchasable games from Streetpass Mii Plaza. One of the true 100 percent completion goals for this game is to earn gold medals on all 60 islands. In order to do that, all 160 fish in the game needs to be caught with an A+ ranking. An A+ rank is the best rank and is determined by how big the fish is. Due to the large number of fish in the game, deciding the best island to visit given the bait given is difficult. I developed this tool to hopefully help me (and possibly you) with deciding where to fish.</p>
+	<p>This tool works by creating a "rank" for each island based off of how many baits you have. A heavier weight is given if the bait you have only corrosponds to fish you do not yet have an A+ of. I have dubbed this as "Exclusive" bait. A lighter weight is given if the bait you have corrosponds to a mixture of fish where some have an A+. I have dubbed this as 'Non-Exclusive' bait. Additionally, islands with more A+ already caught have a minor boost in rank.</p>
+	<p>The exact numbers is computed like so:</p>
+	<ul>
+		<li>Exclusive Bait: 100 per bait</li>
+		<li>Non-Exclusive bait: 30 per bait</li>
+		<li>A+ at this location: 5 per A+</li>
+	</ul>  
+	<p>Sometimes, locations can have 1-2 remaining fish to A+. I consider the process of prioritising these locations "Cleanup." I have added a toggle to do this by adding 100 weight multiplied by the percentage of A+ caught at the island.</p>
+	<p>This project was developed using replit.com, and is hosted on <a herf="https://github.com/minif/ultimate-angler-a-plus-tracker">Github</a>. It is currently WIP and I would want to implement the following features:</p>
+	<ul>
+		<li>Better UI (Possible Ultimate Angler themed)</li>
+		<li>Weight fine tuning</li>
+		<li>Mystery Species checkbox (currently they are considered like normal fish)</li>
+	</ul>  
+</body>
+
+</html>
