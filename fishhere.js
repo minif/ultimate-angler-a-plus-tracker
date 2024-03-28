@@ -5,9 +5,11 @@ initTable = function() {
 	if (checkboxes == null) return;
 	loc = localStorage.getItem("ua_fishhere");
 	place = Islands.find(obj => {
-												return obj.name == loc});
+		return obj.name == loc
+	});
 	console.log(place)
 
+	document.getElementById("fishCount").innerText = place.name + " ("+ place.island + ")"
 	table = document.getElementById("fishherediv");
 	table.innerHTML = "	\
 		<th>Fish</th>\
@@ -24,12 +26,13 @@ initTable = function() {
 			<th>WT</th>\
 			<th>BK</th>\
 		<th>A+</th>\
+		<th>Fish Number</th>\
 		</tr>";
 
 	fishherecheckboxes = [];
 	for (i of place.fish) {
 		row = table.insertRow(-1);
-		row.insertCell(-1).innerText = i.name;
+		row.insertCell(-1).innerText = i.propername;
 		for (bait of Object.keys(i.bait)) {
 			r = row.insertCell(-1)
 			if (i.bait[bait]) ic = "X"
@@ -46,6 +49,8 @@ initTable = function() {
 		checkbox.checked = checkboxes[i.id];
 		checkboxcell.appendChild(checkbox);
 		fishherecheckboxes.push(checkbox);
+		aid = row.insertCell(-1);
+		aid.innerText = i.id;
 	}
 }
 

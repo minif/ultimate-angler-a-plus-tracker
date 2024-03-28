@@ -1,4 +1,20 @@
 baitThisRun = {};
+mysterySpeciesThisRun = {
+	"giant squid": false,
+	"oarfish": false,
+	"golden bass": false,
+	"golden koi": false,
+	"golden bream": false,
+	"golden rainbow trout": false,
+	"golden salmon": false,
+	"golden tuna": false,
+	"golden swordfish": false,
+	"golden shark": false,
+	"cheep cheep": false,
+	"blooper": false,
+};
+
+
 CLEANUP_WEIGHT = 0;
 function scoreCompare(a, b) {
 	if (a.score < b.score) {
@@ -24,6 +40,7 @@ baitMap = {
 	white: 11,
 	black: 12,
 }
+
 
 resetBait = function() {
 	baitThisRun = {
@@ -54,11 +71,36 @@ initButtons = function() {
 		button.bait = bait;
 		buttonDiv.appendChild(button);
 	}
+
+	mysteryButtonDiv = document.getElementById("mysteryadder");
+	for (fish of Object.keys(mysterySpeciesThisRun)) {
+		//Create button
+		var button = document.createElement("button");
+		button.id = "mystery" + fish;
+		button.onclick = function() { updateMystery(this.fish) };
+		button.innerText = fish;
+		button.fish = fish;
+		mysteryButtonDiv.appendChild(button);
+	}
 }
 
 cleanupToggle = function() {
 	if (CLEANUP_WEIGHT == 0) CLEANUP_WEIGHT = 100;
 	else CLEANUP_WEIGHT = 0;
+	updateBaitDisplay();
+}
+
+toggleMysterySpecies = function() {
+	mysterySpeciesTotalState = false
+	for (fish in mysterySpeciesThisRun) {
+		if (mysterySpeciesThisRun[fish]) {
+			mysterySpeciesTotalState = true
+		}
+	}
+
+	for (fish in mysterySpeciesThisRun) {
+		mysterySpeciesThisRun[fish] = !mysterySpeciesTotalState;
+	}
 	updateBaitDisplay();
 }
 
@@ -70,6 +112,11 @@ updateBait = function(baitname) {
 	if (baitCount < 10) {
 		baitThisRun[baitname]++;
 	}
+	updateBaitDisplay();
+}
+
+updateMystery = function(fishname) {
+	mysterySpeciesThisRun[fishname] = !mysterySpeciesThisRun[fishname]
 	updateBaitDisplay();
 }
 
@@ -91,33 +138,38 @@ rankIslands = function() {
 		islandToRank.name = Islands[i].name;
 		islandToRank.island = Islands[i].island;
 		islandScore = 0;
+		hasMysterySpecies = false
 		baitRank = {};
 		//0=not used, 1 = non-exclusive, 2 = exclusive
 		for (baitName of baitLists) {
-			baitExists = false;
-			baitHasNeed = false;
-			isExclusive = true;
+			baitExistsAtIslandAPlus = false;
+			baitExistsAtIslandNonAPlus = false;
 			for (fish of Islands[i].fish) {
 				fishHasBait = fish.bait[baitName];
 				fishAlreadyAPlus = checkboxes[fish.id];
-				if (!fishAlreadyAPlus) {
-					baitHasNeed = true;
-				}
 				if (fishHasBait) {
-					baitExists = true;
-					if (fishAlreadyAPlus) {
-						isExclusive = false;
+					if (fish.mysterySpecies) {
+						isSpotted = mysterySpeciesThisRun[fish.namelower];
+						hasMysterySpecies = true
+					} else {
+						isSpotted = true;
+					}
+					if (isSpotted) {
+						if (fishAlreadyAPlus) {
+							baitExistsAtIslandAPlus = true;
+						} else {
+							baitExistsAtIslandNonAPlus = true;
+						}
 					}
 				}
 			}
 			baitRankInt = 0;
-			if (baitExists) {
-				baitRankInt = 1;
-				if (isExclusive) {
-					baitRankInt = 2;
+			if (baitExistsAtIslandNonAPlus) {
+				baitRankInt = 2;
+				if (baitExistsAtIslandAPlus) {
+					baitRankInt = 1;
 				}
 			}
-			if (!baitHasNeed) baitRankInt = 0;
 			baitRank[baitName] = baitRankInt;
 		}
 		//Determine how many a+ there are
@@ -149,6 +201,7 @@ rankIslands = function() {
 		islandScore += islandNonExclusives * 30 * (1 + (islandAplus / islandTotalFish) * CLEANUP_WEIGHT);
 		islandToRank.exclusives = islandExclusives;
 		islandToRank.nonExclusives = islandNonExclusives;
+		islandToRank.hasMysterySpecies = hasMysterySpecies;
 		//Use already caught A+ as part of rank
 		for (fish of Islands[i].fish) {
 			fishAlreadyAPlus = checkboxes[fish.id];
@@ -184,8 +237,8 @@ updateBaitDisplay = function() {
 	table.innerHTML = "	<th></th>\
 		<th>Location</th>\
 			<th>Island</th>\
-			<th>Excl / Non-Excl</th>\
-			<th>A+ / Total</th>\
+			<th>Baits</th>\
+			<th>A+ count</th>\
 			<th>RD</th>\
 			<th>OR</th>\
 			<th>YL</th>\
@@ -205,10 +258,12 @@ updateBaitDisplay = function() {
 		fishherecell = row.insertCell(-1)
 		fishherebutton = document.createElement("button");
 		fishherebutton.innerText = "Fish Here";
-		fishherebutton.onclick = function(){ fishHere(this.local) }
+		fishherebutton.onclick = function() { fishHere(this.local) }
 		fishherebutton.local = locRanks[i].name;
 		fishherecell.appendChild(fishherebutton);
-		row.insertCell(-1).innerText = locRanks[i].name;
+		isMysteryIslandText = ""
+		if (locRanks[i].hasMysterySpecies) isMysteryIslandText = "*"
+		row.insertCell(-1).innerText = locRanks[i].name + isMysteryIslandText;
 		row.insertCell(-1).innerText = locRanks[i].island;
 		row.insertCell(-1).innerText = locRanks[i].exclusives + "/" + locRanks[i].nonExclusives;
 		row.insertCell(-1).innerText = locRanks[i].aplusCount + "/" + locRanks[i].fishCount;
@@ -223,7 +278,13 @@ updateBaitDisplay = function() {
 			//if (bait=="white"||bait=="yellow")
 		}
 	}
+
+	for (fish of Object.keys(mysterySpeciesThisRun)) {
+		button = document.getElementById("mystery" + fish);
+		if (mysterySpeciesThisRun[fish]) button.style.fontWeight = 'bold';
+		else button.style.fontWeight = '';
+	}
 }
 
-resetBait();
 initButtons();
+resetBait();
