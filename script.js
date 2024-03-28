@@ -285,6 +285,6 @@ updateBaitDisplay = function() {
 		else button.style.fontWeight = '';
 	}
 }
-
+ 
 initButtons();
 resetBait();
