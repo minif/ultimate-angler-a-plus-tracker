@@ -7,7 +7,6 @@ initTable = function() {
 	place = Islands.find(obj => {
 		return obj.name == loc
 	});
-	console.log(place)
 
 	document.getElementById("fishCount").innerText = place.name + " ("+ place.island + ")"
 	table = document.getElementById("fishherediv");
@@ -64,7 +63,12 @@ saveCheckBoxes = function() {
 
 	//Save as Web storage
 	localStorage.setItem("ua_fishcheckboxes", JSON.stringify(checkboxes));
-	initTable();
+	uploadToPHP(function() {
+		initTable();
+	});
 }
 
-initTable();
+ downloadFromPHP(function() {
+	 initTable();
+ });
+

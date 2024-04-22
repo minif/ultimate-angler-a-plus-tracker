@@ -285,6 +285,7 @@ updateBaitDisplay = function() {
 		else button.style.fontWeight = '';
 	}
 }
- 
-initButtons();
-resetBait();
+ downloadFromPHP(function() {
+	 initButtons();
+	 resetBait();
+ });

@@ -8,9 +8,10 @@ function upload() {
 		localStorage.setItem("ua_fishcheckboxes", e.target.result);
 		populateCheckBoxes();
 		updateCount("");
+		uploadToPHP(function() { });
 	}
 	reader.readAsText(selectedFile);
-	
+
 }
 
 function download() {
@@ -53,7 +54,8 @@ saveCheckBoxes = function() {
 
 	//Save as Web storage
 	localStorage.setItem("ua_fishcheckboxes", JSON.stringify(objToSave));
-	updateCount("")
+	uploadToPHP(function() {});
+	updateCount("") 
 }
 
 updateCount = function(append) {
@@ -86,6 +88,6 @@ genCheckBoxes = function() {
 	updateCount("");
 }
 
-
-
-genCheckBoxes()
+downloadFromPHP(function() {
+	genCheckBoxes()
+});

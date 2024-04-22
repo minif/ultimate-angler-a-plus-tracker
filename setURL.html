@@ -10,15 +10,16 @@
 
 <body>
 	<a href="./">Go Back</a>
-	<p id="fishCount"></p>
-	<table id="fishherediv">
+	<p>Enter url here:</p>
+	<input type="text" id="url-set"></input>
+	<button onclick="updateURL()">Update</button>
+	<button onclick="clearURL()">Clear</button>
+	<p id="current-url">Current Url:</p>
+	
 
-	</table>
-	<button onclick="saveCheckBoxes()">Save Selection</button>
+	</div>
 	<script src="server.js"></script>
-	<script src="fishlist.js"></script>
-	<script src="islandlist.js"></script>
-	<script src="fishhere.js"></script>
+	<script src="setserver.js"></script>
 </body>
 
 </html>
